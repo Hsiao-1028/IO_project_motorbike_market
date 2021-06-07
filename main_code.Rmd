@@ -6,9 +6,21 @@ output: html_document
 ---
 
 ```{r}
+library("tidyverse")
+library("openxlsx")
+
+
+
+```
+
+
+```{r}
 #import datasests
 
-gogoro_s <- read.csv()
+gogoro_s <- read_excel("/Users/Ano/Desktop/IO_motorbikes/gogoro_sales.xlsx")
+
+m01<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M01.xlsx", sheet = 1, rows = c(2, 4, 6), cols = 5:7, colNames = FALSE)
+# need to change into xlsx type of data
 
 
 ```
