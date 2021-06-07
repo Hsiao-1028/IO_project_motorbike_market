@@ -1,0 +1,15 @@
+---
+title: "main_code"
+author: "Hsiao"
+date: "6/7/2021"
+output: html_document
+---
+
+```{r}
+#import datasests
+
+gogoro_s <- read.csv()
+
+
+```
+
