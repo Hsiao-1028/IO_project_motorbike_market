@@ -70,74 +70,99 @@ d1801<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 
 #}  
 ```
 
-```{r}
-
-
-
-
-```
-
-
-
-
 
 ```{r}
-#2104
-d2104 <-as.data.table(d2104)
+# automation 
+#d2104 <-as.data.table(d2104)
+#d2103 <-as.data.table(d2103)
+#d2102 <-as.data.table(d2102)
+#d2101 <-as.data.table(d2101)
 
 list2env(eapply(.GlobalEnv, function(x) {if(is.data.frame(x)) {setDT(x)} else {x}}), .GlobalEnv)
 
-d2104$X4 <- toupper(d2104$X4)
-d2103$X4 <- toupper(d2103$X4)
-d2102$X4 <- toupper(d2102$X4)
-d2101$X4 <- toupper(d2101$X4)
+top<- function(data){
+  return(data[, X4:=toupper(X4)])
+} # change into 
 
-d2012$X4 <- toupper(d2012$X4)
-d2011$X4 <- toupper(d2011$X4)
-d2010$X4 <- toupper(d2010$X4)
-d2009$X4 <- toupper(d2009$X4)
-d2008$X4 <- toupper(d2008$X4)
-d2007$X4 <- toupper(d2007$X4)
-d2006$X4 <- toupper(d2006$X4)
-d2005$X4 <- toupper(d2005$X4)
-d2004$X4 <- toupper(d2004$X4)
-d2003$X4 <- toupper(d2003$X4)
-d2002$X4 <- toupper(d2002$X4)
-d2001$X4 <- toupper(d2001$X4)
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
 
-d1912$X4 <- toupper(d1912$X4)
-d1911$X4 <- toupper(d1911$X4)
-d1910$X4 <- toupper(d1910$X4)
-d1909$X4 <- toupper(d1909$X4)
-d1908$X4 <- toupper(d1908$X4)
-d1907$X4 <- toupper(d1907$X4)
-d1906$X4 <- toupper(d1906$X4)
-d1905$X4 <- toupper(d1905$X4)
-d1904$X4 <- toupper(d1904$X4)
-d1903$X4 <- toupper(d1903$X4)
-d1902$X4 <- toupper(d1902$X4)
-d1901$X4 <- toupper(d1901$X4)
-
-d1812$X4 <- toupper(d1812$X4)
-d1811$X4 <- toupper(d1811$X4)
-d1810$X4 <- toupper(d1810$X4)
-d1809$X4 <- toupper(d1809$X4)
-d1808$X4 <- toupper(d1808$X4)
-d1807$X4 <- toupper(d1807$X4)
-d1806$X4 <- toupper(d1806$X4)
-d1805$X4 <- toupper(d1805$X4)
-d1804$X4 <- toupper(d1804$X4)
-d1803$X4 <- toupper(d1803$X4)
-d1802$X4 <- toupper(d1802$X4)
-d1801$X4 <- toupper(d1801$X4)
+lapply(data_list, top)
 
 
+inn<- function(x){
+  x<-subset(x, X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"))
+ return(x)
+}
 
-table(sort(d1803$X4))
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+
+# lapply(data_list, inn)
+# lapply fail
+# need to assign I do not know why
+
+d2104<- d2104[ d2104$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2103<- d2103[ d2103$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2102<- d2102[ d2102$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2101<- d2101[ d2101$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+
+d2012<- d2012[ d2012$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2011<- d2011[ d2011$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2010<- d2010[ d2010$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2009<- d2009[ d2009$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2008<- d2008[ d2008$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2007<- d2007[ d2007$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2006<- d2006[ d2006$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2005<- d2005[ d2005$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2004<- d2004[ d2004$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2003<- d2003[ d2003$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2002<- d2002[ d2002$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d2001<- d2001[ d2001$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+
+d1912<- d1912[ d1912$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1911<- d1911[ d1911$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1910<- d1910[ d1910$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1909<- d1909[ d1909$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1908<- d1908[ d1908$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1907<- d1907[ d1907$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1906<- d1906[ d1906$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1905<- d1905[ d1905$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1904<- d1904[ d1904$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1903<- d1903[ d1903$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1902<- d1902[ d1902$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1901<- d1901[ d1901$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+
+d1812<- d1812[ d1812$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1811<- d1811[ d1811$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1810<- d1810[ d1810$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1809<- d1809[ d1809$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1808<- d1808[ d1808$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1807<- d1807[ d1807$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1806<- d1806[ d1806$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1805<- d1805[ d1805$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1804<- d1804[ d1804$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1803<- d1803[ d1803$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1802<- d1802[ d1802$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1801<- d1801[ d1801$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+
+
+#list2env(lapply(data_list, function(x) x[, .(col1, col2)]))
+
+# data_list<- lapply(data_list, inn) # take only the ccs
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+
+#set names 
+
+setdtname <- function(data){
+  setnames(data,c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
+}
+# function works
+lapply(data_list, setdtname)
+
 ```
 
 ---
 Meta Programming ||| In progress|||
+
 df.list<-lapply(1:4, function(x) eval(parse(text=paste0("d210", x)))) #In order to store all datasets in one list using their name
 names(df.list)<-lapply(1:4, function(x) paste0("d201", x)) #Adding the name of each df in case you want to unlist the list afterwards
 for (i in 1:length(df.list)) {
@@ -149,9 +174,8 @@ for (i in 1:length(df.list)) {
 ```{r}
 # 2104
 
-d2104<- d2104[d2104$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
-
-setnames(d2104, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
+#d2104<- d2104[d2104$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+#setnames(d2104, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
 
 d2104<- d2104[1:19, firm := "SYM",]
 d2104<- d2104[19:34, firm := "SUZUKI",]
@@ -169,11 +193,13 @@ d2104[, "year":=2021, ]
 d2104[, "month":=04, ]
 d2104[, c("year","month","firm","cc","produce","sales_in","sales_out")]
 ```
+
+
+
 ```{r}
 #2013
-d2103<- d2103[d2103$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
-
-setnames(d2103, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
+# d2103<- d2103[d2103$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+# setnames(d2103, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
 
 d2103<- d2103[1:18, firm := "SYM",]
 d2103<- d2103[19:34, firm := "SUZUKI",]
@@ -190,6 +216,345 @@ d2103<- d2103[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
 d2103[, "year":=2021, ]
 d2103[, "month":=03, ]
 d2103[, c("year","month","firm","cc","produce","sales_in","sales_out")]
+
+```
+
+```{r}
+#2102
+# d2102<- d2102[d2102$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+# setnames(d2102, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
+
+d2102<- d2102[1:18, firm := "SYM",]
+d2102<- d2102[19:34, firm := "SUZUKI",]
+d2102<- d2102[35:38, firm := "YAMAHA",]
+d2102<- d2102[39:70, firm := "KYMCO",]
+d2102<- d2102[1:70]
+
+d2102$produce<- as.integer(d2102$produce)
+d2102$sales_in<- as.integer(d2102$sales_in)
+d2102$sales_out<- as.integer(d2102$sales_out)
+
+string<- c("produce","sales_in", "sales_out")
+d2102<- d2102[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2102[, "year":=2021, ]
+d2102[, "month":=02, ]
+d2102[, c("year","month","firm","cc","produce","sales_in","sales_out")]
+
+
+```
+
+
+
+```{r}
+# deal with firm
+
+d2104<- d2104[1:19, firm := "SYM",]
+d2104<- d2104[19:34, firm := "SUZUKI",]
+d2104<- d2104[35:38, firm := "YAMAHA",]
+d2104<- d2104[39:61, firm := "KYMCO",]
+d2104<- d2104[71:82, firm := "PGO",]
+d2104<- d2104[c(1:61, 71:82),]
+
+d2103<- d2103[1:18, firm := "SYM",]
+d2103<- d2103[19:34, firm := "SUZUKI",]
+d2103<- d2103[35:38, firm := "YAMAHA",]
+d2103<- d2103[39:61, firm := "KYMCO",]
+d2103<- d2103[71:82, firm := "PGO",]
+d2103<- d2103[c(1:61, 71:82),]
+
+d2102<- d2102[1:18, firm := "SYM",]
+d2102<- d2102[19:34, firm := "SUZUKI",]
+d2102<- d2102[35:38, firm := "YAMAHA",]
+d2102<- d2102[39:61, firm := "KYMCO",]
+d2102<- d2102[71:82, firm := "PGO",]
+d2102<- d2102[c(1:61, 71:82),]
+
+d2101<- d2101[1:18, firm := "SYM",]
+d2101<- d2101[19:34, firm := "SUZUKI",]
+d2101<- d2101[35:37, firm := "YAMAHA",]
+d2101<- d2101[38:60, firm := "KYMCO",]
+d2101<- d2101[70:81, firm := "PGO",]
+d2101<- d2101[c(1:61, 70:81),]
+```
+
+
+```{r}
+# 
+# d2012<- d2012[1:18, firm := "SYM",]
+# d2012<- d2012[19:34, firm := "SUZUKI",]
+# d2012<- d2012[35:38, firm := "YAMAHA",]
+# d2012<- d2012[39:61, firm := "KYMCO",]
+# d2012<- d2012[71:82, firm := "PGO",]
+# d2012<- d2012[c(1:61, 71:82),]
+# 
+# d2011<- d2011[1:18, firm := "SYM",]
+# d2011<- d2011[19:34, firm := "SUZUKI",]
+# d2011<- d2011[35:38, firm := "YAMAHA",]
+# d2011<- d2011[39:61, firm := "KYMCO",]
+# d2011<- d2011[71:82, firm := "PGO",]
+# d2011<- d2011[c(1:61, 71:82),]
+# 
+# d2010<- d2010[1:18, firm := "SYM",]
+# d2010<- d2010[19:34, firm := "SUZUKI",]
+# d2010<- d2010[35:38, firm := "YAMAHA",]
+# d2010<- d2010[39:61, firm := "KYMCO",]
+# d2010<- d2010[71:82, firm := "PGO",]
+# d2010<- d2010[c(1:61, 71:82),]
+
+d2009<- d2009[1:19, firm := "SYM",]
+d2009<- d2009[20:35, firm := "SUZUKI",]
+d2009<- d2009[36:39, firm := "YAMAHA",]
+d2009<- d2009[40:62, firm := "KYMCO",]
+d2009<- d2009[72:83, firm := "PGO",]
+d2009<- d2009[c(1:62, 72:83),]
+
+# d2008<- d2008[1:18, firm := "SYM",]
+# d2008<- d2008[19:34, firm := "SUZUKI",]
+# d2008<- d2008[35:38, firm := "YAMAHA",]
+# d2008<- d2008[39:61, firm := "KYMCO",]
+# d2008<- d2008[71:82, firm := "PGO",]
+# d2008<- d2008[c(1:61, 71:82),]
+# 
+# d2007<- d2007[1:18, firm := "SYM",]
+# d2007<- d2007[19:34, firm := "SUZUKI",]
+# d2007<- d2007[35:38, firm := "YAMAHA",]
+# d2007<- d2007[39:61, firm := "KYMCO",]
+# d2007<- d2007[71:82, firm := "PGO",]
+# d2007<- d2007[c(1:61, 71:82),]
+# 
+# d2006<- d2006[1:18, firm := "SYM",]
+# d2006<- d2006[19:34, firm := "SUZUKI",]
+# d2006<- d2006[35:38, firm := "YAMAHA",]
+# d2006<- d2006[39:61, firm := "KYMCO",]
+# d2006<- d2006[71:82, firm := "PGO",]
+# d2006<- d2006[c(1:61, 71:82),]
+# 
+# d2005<- d2005[1:18, firm := "SYM",]
+# d2005<- d2005[19:34, firm := "SUZUKI",]
+# d2005<- d2005[35:38, firm := "YAMAHA",]
+# d2005<- d2005[39:61, firm := "KYMCO",]
+# d2005<- d2005[71:82, firm := "PGO",]
+# d2005<- d2005[c(1:61, 71:82),]
+
+test<- list(d2012, d2011, d2010, d2008, d2007,d2006 ,d2005,d2004,d2003,d2002 ,d2001)
+# d2009 is strange
+
+lapply(test, function(x) {
+   x<- x[1:18, firm :="SYM"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[19:34, firm :="SUZUKI"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[35:38, firm :="YAMAHA"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[39:61, firm :="KYMCO"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[71:82, firm :="PGO"]
+   return(x)
+})
+
+d2012<- d2012[c(1:61, 71:82),]
+d2011<- d2011[c(1:61, 71:82),]
+d2010<- d2010[c(1:61, 71:82),]
+d2008<- d2008[c(1:61, 71:82),]
+d2007<- d2007[c(1:61, 71:82),]
+d2006<- d2006[c(1:61, 71:82),]
+d2005<- d2005[c(1:61, 71:82),]
+d2004<- d2004[c(1:61, 71:82),]
+d2003<- d2003[c(1:61, 71:82),]
+d2002<- d2002[c(1:61, 71:82),]
+d2001<- d2001[c(1:61, 71:82),]
+```
+
+
+```{r}
+# 2019 year :
+
+test<- list(d1912, d1911)
+lapply(test, function(x) {
+   x<- x[1:18, firm :="SYM"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[19:34, firm :="SUZUKI"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[35:38, firm :="YAMAHA"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[39:61, firm :="KYMCO"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[71:82, firm :="PGO"]
+   return(x)
+})
+# original 109 for 12, 11
+# 110 for below
+
+test<- list(d1910, d1909,d1908, d1907, d1906)
+lapply(test, function(x) {
+   x<- x[1:18, firm :="SYM"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[19:34, firm :="SUZUKI"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[35:38, firm :="YAMAHA"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[39:61, firm :="KYMCO"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[71:83, firm :="PGO"]
+   return(x)
+})
+############################
+test<- list(d1905, d1904) 
+lapply(test, function(x) {
+   x<- x[1:18, firm :="SYM"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[19:36, firm :="SUZUKI"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[37:40, firm :="YAMAHA"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[41:63, firm :="KYMCO"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[73:85, firm :="PGO"]
+   return(x)
+})
+
+#############################
+test<- list(d1903, d1902, d1901) 
+lapply(test, function(x) {
+   x<- x[1:19, firm :="SYM"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[20:37, firm :="SUZUKI"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[38:41, firm :="YAMAHA"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[42:64, firm :="KYMCO"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[74:86, firm :="PGO"]
+   return(x)
+})
+
+
+d1912<- d1912[c(1:61, 71:82),]
+d1911<- d1911[c(1:61, 71:82),]
+d1910<- d1910[c(1:61, 71:83),]
+d1909<- d1909[c(1:61, 71:83),]
+d1908<- d1908[c(1:61, 71:83),]
+d1907<- d1907[c(1:61, 71:83),]
+d1906<- d1906[c(1:61, 71:83),]
+d1905<- d1905[c(1:63, 73:85),]
+d1904<- d1904[c(1:63, 73:85),]
+d1903<- d1903[c(1:64, 74:86),]
+d1902<- d1902[c(1:64, 74:86),]
+d1901<- d1901[c(1:64, 74:86),]
+
+```
+
+
+
+```{r}
+# 2018 
+
+test<- list(d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802) 
+lapply(test, function(x) {
+   x<- x[1:19, firm :="SYM"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[20:37, firm :="SUZUKI"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[38:41, firm :="YAMAHA"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[42:64, firm :="KYMCO"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[74:86, firm :="PGO"]
+   return(x)
+})
+
+d1812<- d1812[c(1:64, 74:86),]
+d1811<- d1811[c(1:64, 74:86),]
+d1810<- d1810[c(1:64, 74:86),]
+d1809<- d1809[c(1:64, 74:86),]
+d1808<- d1808[c(1:64, 74:86),]
+d1807<- d1807[c(1:64, 74:86),]
+d1806<- d1806[c(1:64, 74:86),]
+d1805<- d1805[c(1:64, 74:86),]
+d1804<- d1804[c(1:64, 74:86),]
+d1803<- d1803[c(1:64, 74:86),]
+d1802<- d1802[c(1:64, 74:86),]
+
+
+
+d1801<- d1801[1:19, firm := "SYM",]
+d1801<- d1801[20:36, firm := "SUZUKI",]
+d1801<- d1801[37:40, firm := "YAMAHA",]
+d1801<- d1801[41:63, firm := "KYMCO",]
+d1801<- d1801[73:86, firm := "PGO",]
+d1801<- d1801[c(1:63, 73:86),]
 
 
 
