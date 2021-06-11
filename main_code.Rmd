@@ -10,6 +10,7 @@ library("tidyverse")
 library("openxlsx")
 library("data.table")
 library("readxl")
+library("dplyr")
 
 ```
 
@@ -79,6 +80,7 @@ d1801<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 
 #d2101 <-as.data.table(d2101)
 
 list2env(eapply(.GlobalEnv, function(x) {if(is.data.frame(x)) {setDT(x)} else {x}}), .GlobalEnv)
+
 
 top<- function(data){
   return(data[, X4:=toupper(X4)])
@@ -180,8 +182,9 @@ for (i in 1:length(df.list)) {
 d2104<- d2104[1:19, firm := "SYM",]
 d2104<- d2104[19:34, firm := "SUZUKI",]
 d2104<- d2104[35:38, firm := "YAMAHA",]
-d2104<- d2104[39:70, firm := "KYMCO",]
-d2104<- d2104[1:70]
+d2104<- d2104[39:61, firm := "KYMCO",]
+d2104<- d2104[71:82, firm := "PGO",]
+d2104<- d2104[c(1:61, 71:82),]
 
 d2104$produce<- as.integer(d2104$produce)
 d2104$sales_in<- as.integer(d2104$sales_in)
@@ -191,6 +194,7 @@ string<- c("produce","sales_in", "sales_out")
 d2104<- d2104[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
 d2104[, "year":=2021, ]
 d2104[, "month":=04, ]
+# type is drop out here ! 
 d2104[, c("year","month","firm","cc","produce","sales_in","sales_out")]
 ```
 
@@ -201,59 +205,36 @@ d2104[, c("year","month","firm","cc","produce","sales_in","sales_out")]
 # d2103<- d2103[d2103$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
 # setnames(d2103, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
 
-d2103<- d2103[1:18, firm := "SYM",]
-d2103<- d2103[19:34, firm := "SUZUKI",]
-d2103<- d2103[35:38, firm := "YAMAHA",]
-d2103<- d2103[39:70, firm := "KYMCO",]
-d2103<- d2103[1:70]
-
-d2103$produce<- as.integer(d2103$produce)
-d2103$sales_in<- as.integer(d2103$sales_in)
-d2103$sales_out<- as.integer(d2103$sales_out)
-
-string<- c("produce","sales_in", "sales_out")
-d2103<- d2103[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
-d2103[, "year":=2021, ]
-d2103[, "month":=03, ]
-d2103[, c("year","month","firm","cc","produce","sales_in","sales_out")]
-
-```
-
-```{r}
-#2102
-# d2102<- d2102[d2102$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
-# setnames(d2102, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
-
-d2102<- d2102[1:18, firm := "SYM",]
-d2102<- d2102[19:34, firm := "SUZUKI",]
-d2102<- d2102[35:38, firm := "YAMAHA",]
-d2102<- d2102[39:70, firm := "KYMCO",]
-d2102<- d2102[1:70]
-
-d2102$produce<- as.integer(d2102$produce)
-d2102$sales_in<- as.integer(d2102$sales_in)
-d2102$sales_out<- as.integer(d2102$sales_out)
-
-string<- c("produce","sales_in", "sales_out")
-d2102<- d2102[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
-d2102[, "year":=2021, ]
-d2102[, "month":=02, ]
-d2102[, c("year","month","firm","cc","produce","sales_in","sales_out")]
-
+# d2103<- d2103[1:18, firm := "SYM",]
+# d2103<- d2103[19:34, firm := "SUZUKI",]
+# d2103<- d2103[35:38, firm := "YAMAHA",]
+# d2103<- d2103[39:70, firm := "KYMCO",]
+# d2103<- d2103[1:70]
+# 
+# d2103$produce<- as.integer(d2103$produce)
+# d2103$sales_in<- as.integer(d2103$sales_in)
+# d2103$sales_out<- as.integer(d2103$sales_out)
+# 
+# string<- c("produce","sales_in", "sales_out")
+# d2103<- d2103[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+# d2103[, "year":=2021, ]
+# d2103[, "month":=03, ]
+# d2103[, c("year","month","firm","cc","produce","sales_in","sales_out")]
 
 ```
+
 
 
 
 ```{r}
 # deal with firm
 
-d2104<- d2104[1:19, firm := "SYM",]
-d2104<- d2104[19:34, firm := "SUZUKI",]
-d2104<- d2104[35:38, firm := "YAMAHA",]
-d2104<- d2104[39:61, firm := "KYMCO",]
-d2104<- d2104[71:82, firm := "PGO",]
-d2104<- d2104[c(1:61, 71:82),]
+# d2104<- d2104[1:19, firm := "SYM",]
+# d2104<- d2104[19:34, firm := "SUZUKI",]
+# d2104<- d2104[35:38, firm := "YAMAHA",]
+# d2104<- d2104[39:61, firm := "KYMCO",]
+# d2104<- d2104[71:82, firm := "PGO",]
+# d2104<- d2104[c(1:61, 71:82),]
 
 d2103<- d2103[1:18, firm := "SYM",]
 d2103<- d2103[19:34, firm := "SUZUKI",]
@@ -556,6 +537,101 @@ d1801<- d1801[41:63, firm := "KYMCO",]
 d1801<- d1801[73:86, firm := "PGO",]
 d1801<- d1801[c(1:63, 73:86),]
 
+```
 
+
+
+```{r}
+# 
+
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+
+dinteg<- function(data){
+  return(data[, produce:=as.integer(produce)])
+} # change into 
+lapply(data_list, dinteg)
+class(d1803$produce)
+lapply(data_list, function(x) { return(x[, sales_in := as.integer(sales_in)])})
+lapply(data_list, function(x) { return(x[, sales_out := as.integer(sales_out)])})
+
+string<- c("produce","sales_in", "sales_out")
+
+d2103<- d2103[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2102<- d2102[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2101<- d2101[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+
+d2012<- d2012[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2011<- d2011[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2010<- d2010[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2009<- d2009[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2008<- d2008[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2007<- d2007[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2006<- d2006[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2005<- d2005[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2004<- d2004[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2003<- d2003[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2002<- d2002[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2001<- d2001[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+
+d1912<- d1912[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1911<- d1911[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1910<- d1910[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1909<- d1909[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1908<- d1908[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1907<- d1907[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1906<- d1906[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1905<- d1905[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1904<- d1904[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1903<- d1903[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1902<- d1902[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1901<- d1901[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+
+d1812<- d1812[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1811<- d1811[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1810<- d1810[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1809<- d1809[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1808<- d1808[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1807<- d1807[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1806<- d1806[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1805<- d1805[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1804<- d1804[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1803<- d1803[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1802<- d1802[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1801<- d1801[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+
+lapply(list(d2103, d2102, d2101), function(x){ return(x[ ,"year":=2021,])})
+lapply(list(d2012, d2011, d2010, d2009, d2008, d2007, d2006, d2005, d2004, d2003, d2002, d2001), function(x){ return(x[,"year":=2020])})
+lapply(list(d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901), function(x){ return(x[,"year":=2019])})
+lapply(list(d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801), function(x){ return(x[,"year":=2018])})
+
+lapply(list(d2101, d2001, d1901, d1801),function(x){ return(x[,"month":=1])})
+lapply(list(d2102, d2002, d1902, d1802),function(x){ return(x[,"month":=2])})
+lapply(list(d2103, d2003, d1903, d1803),function(x){ return(x[,"month":=3])})
+lapply(list( d2004, d1904, d1804),function(x){ return(x[,"month":=4])})
+lapply(list( d2005, d1904, d1805),function(x){ return(x[,"month":=5])})
+lapply(list( d2006, d1906, d1806),function(x){ return(x[,"month":=6])})
+lapply(list( d2007, d1907, d1807),function(x){ return(x[,"month":=7])})
+lapply(list( d2008, d1908, d1808),function(x){ return(x[,"month":=8])})
+lapply(list( d2009, d1909, d1809),function(x){ return(x[,"month":=9])})
+lapply(list( d2010, d1910, d1810),function(x){ return(x[,"month":=10])})
+lapply(list( d2011, d1911, d1811),function(x){ return(x[,"month":=11])})
+lapply(list( d2012, d1912, d1812),function(x){ return(x[,"month":=12])})
+```
+
+```{r}
+
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+data<- rbind(unlist(data_list))
+
+data<- bind_rows(data_list)
+write.table(data, file = "sales_data.csv", sep = ",",col.names = TRUE, row.names = FALSE)
+#extrating the data 
+# drop out 
+# 什麼時候做好了？？？？
+# d2102[, c("year","month","firm","cc","produce","sales_in","sales_out")]
 
 ```
+
+
