@@ -18,7 +18,6 @@ library("dplyr")
 ```{r}
 #import datasests
 
-gogoro_s <- read_excel("/Users/Ano/Desktop/IO_motorbikes/gogoro_sales.xlsx")
 
 d2104<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 225, colNames = FALSE)
 # 100 :2010/11/
@@ -65,6 +64,16 @@ d1802<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 
 d1801<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 186, colNames = FALSE)
 
 
+d1712<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 185, colNames = FALSE)
+d1711<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 184, colNames = FALSE)
+d1710<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 183, colNames = FALSE)
+d1709<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 182, colNames = FALSE)
+d1708<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 181, colNames = FALSE)
+d1707<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 180, colNames = FALSE)
+
+
+
+
 # for (i in 2100:2103){
 #paste("d",i, sep = "") <- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = i-1879, colNames = FALSE)
   
@@ -86,7 +95,7 @@ top<- function(data){
   return(data[, X4:=toupper(X4)])
 } # change into 
 
-data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801, d1712, d1711, d1710, d1709, d1708, d1707)
 
 lapply(data_list, top)
 
@@ -146,11 +155,18 @@ d1803<- d1803[ d1803$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","25
 d1802<- d1802[ d1802$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
 d1801<- d1801[ d1801$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
 
+d1712<- d1712[ d1712$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1711<- d1711[ d1711$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1710<- d1710[ d1710$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1709<- d1709[ d1709$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1708<- d1708[ d1708$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+d1707<- d1707[ d1707$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+
 
 #list2env(lapply(data_list, function(x) x[, .(col1, col2)]))
 
 # data_list<- lapply(data_list, inn) # take only the ccs
-data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801, d1712, d1711, d1710, d1709, d1708, d1707)
 
 #set names 
 
@@ -540,11 +556,51 @@ d1801<- d1801[c(1:63, 73:86),]
 ```
 
 
+```{r}
+# 2017
+
+test<- list(d1712, d1711, d1710, d1709, d1708, d1707) 
+lapply(test, function(x) {
+   x<- x[1:19, firm :="SYM"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[20:37, firm :="SUZUKI"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[38:41, firm :="YAMAHA"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[42:64, firm :="KYMCO"]
+   return(x)
+})
+
+lapply(test, function(x) {
+   x<- x[74:86, firm :="PGO"]
+   return(x)
+})
+
+d1712<- d1712[c(1:64, 74:86),]
+d1711<- d1711[c(1:64, 74:86),]
+d1710<- d1710[c(1:64, 74:86),]
+d1709<- d1709[c(1:64, 74:86),]
+d1708<- d1708[c(1:64, 74:86),]
+d1707<- d1707[c(1:64, 74:86),]
+
+
+```
+
+
 
 ```{r}
 # 
 
-data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801, d1712, d1711, d1710, d1709, d1708, d1707)
 
 dinteg<- function(data){
   return(data[, produce:=as.integer(produce)])
@@ -599,12 +655,20 @@ d1803<- d1803[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
 d1802<- d1802[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
 d1801<- d1801[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
 
-data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+d1712<- d1712[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1711<- d1711[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1710<- d1710[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1709<- d1709[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1708<- d1708[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d1707<- d1707[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801,d1712, d1711, d1710, d1709, d1708, d1707)
 
 lapply(list(d2103, d2102, d2101), function(x){ return(x[ ,"year":=2021,])})
 lapply(list(d2012, d2011, d2010, d2009, d2008, d2007, d2006, d2005, d2004, d2003, d2002, d2001), function(x){ return(x[,"year":=2020])})
 lapply(list(d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901), function(x){ return(x[,"year":=2019])})
 lapply(list(d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801), function(x){ return(x[,"year":=2018])})
+lapply(list(d1712, d1711, d1710, d1709, d1708, d1707), function(x){ return(x[,"year":=2017])})
 
 lapply(list(d2101, d2001, d1901, d1801),function(x){ return(x[,"month":=1])})
 lapply(list(d2102, d2002, d1902, d1802),function(x){ return(x[,"month":=2])})
@@ -612,17 +676,17 @@ lapply(list(d2103, d2003, d1903, d1803),function(x){ return(x[,"month":=3])})
 lapply(list( d2004, d1904, d1804),function(x){ return(x[,"month":=4])})
 lapply(list( d2005, d1904, d1805),function(x){ return(x[,"month":=5])})
 lapply(list( d2006, d1906, d1806),function(x){ return(x[,"month":=6])})
-lapply(list( d2007, d1907, d1807),function(x){ return(x[,"month":=7])})
-lapply(list( d2008, d1908, d1808),function(x){ return(x[,"month":=8])})
-lapply(list( d2009, d1909, d1809),function(x){ return(x[,"month":=9])})
-lapply(list( d2010, d1910, d1810),function(x){ return(x[,"month":=10])})
-lapply(list( d2011, d1911, d1811),function(x){ return(x[,"month":=11])})
-lapply(list( d2012, d1912, d1812),function(x){ return(x[,"month":=12])})
+lapply(list( d2007, d1907, d1807, d1707),function(x){ return(x[,"month":=7])})
+lapply(list( d2008, d1908, d1808, d1708),function(x){ return(x[,"month":=8])})
+lapply(list( d2009, d1909, d1809, d1709),function(x){ return(x[,"month":=9])})
+lapply(list( d2010, d1910, d1810, d1710),function(x){ return(x[,"month":=10])})
+lapply(list( d2011, d1911, d1811, d1711),function(x){ return(x[,"month":=11])})
+lapply(list( d2012, d1912, d1812, d1712),function(x){ return(x[,"month":=12])})
 ```
 
 ```{r}
 
-data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801)
+data_list <- list(d2104, d2103, d2102, d2101, d2012, d2011 ,d2010, d2009, d2008, d2007, d2006, d2005, d2004,d2003, d2002, d2001, d1912, d1911, d1910, d1909, d1908, d1907, d1906, d1905, d1904, d1903, d1902, d1901, d1812, d1811, d1810, d1809, d1808, d1807, d1806, d1805, d1804, d1803, d1802, d1801, d1712, d1711, d1710, d1709, d1708, d1707)
 data<- rbind(unlist(data_list))
 
 data<- bind_rows(data_list)
