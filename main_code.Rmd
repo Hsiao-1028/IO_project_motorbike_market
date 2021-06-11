@@ -8,8 +8,8 @@ output: html_document
 ```{r}
 library("tidyverse")
 library("openxlsx")
-
-
+library("data.table")
+library("readxl")
 
 ```
 
@@ -19,9 +19,178 @@ library("openxlsx")
 
 gogoro_s <- read_excel("/Users/Ano/Desktop/IO_motorbikes/gogoro_sales.xlsx")
 
-m01<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M01.xlsx", sheet = 1, rows = c(2, 4, 6), cols = 5:7, colNames = FALSE)
-# need to change into xlsx type of data
+d2104<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 225, colNames = FALSE)
+# 100 :2010/11/
+d2103<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 224, colNames = FALSE)
+d2102<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 223, colNames = FALSE)
+d2101<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 222, colNames = FALSE)
+d2012<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 221, colNames = FALSE)
+d2011<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 220, colNames = FALSE)
+d2010<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 219, colNames = FALSE)
+d2009<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 218, colNames = FALSE)
+d2008<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 217, colNames = FALSE)
+d2007<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 216, colNames = FALSE)
+d2006<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 215, colNames = FALSE)
+d2005<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 214, colNames = FALSE)
+d2004<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 213, colNames = FALSE)
+d2003<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 212, colNames = FALSE)
+d2002<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 211, colNames = FALSE)
+d2001<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 210, colNames = FALSE)
+d1912<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 209, colNames = FALSE)
+d1911<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 208, colNames = FALSE)
+d1910<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 207, colNames = FALSE)
+d1909<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 206, colNames = FALSE)
+d1908<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 205, colNames = FALSE)
+d1907<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 204, colNames = FALSE)
+d1906<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 203, colNames = FALSE)
+d1905<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 202, colNames = FALSE)
+d1904<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 201, colNames = FALSE)
+d1903<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 200, colNames = FALSE)
+d1902<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 199, colNames = FALSE)
+d1901<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 198, colNames = FALSE)
+
+
+d1812<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 197, colNames = FALSE)
+d1811<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 196, colNames = FALSE)
+d1810<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 195, colNames = FALSE)
+d1809<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 194, colNames = FALSE)
+d1808<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 193, colNames = FALSE)
+d1807<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 192, colNames = FALSE)
+d1806<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 191, colNames = FALSE)
+d1805<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 190, colNames = FALSE)
+d1804<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 189, colNames = FALSE)
+d1803<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 188, colNames = FALSE)
+d1802<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 187, colNames = FALSE)
+d1801<- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = 186, colNames = FALSE)
+
+
+# for (i in 2100:2103){
+#paste("d",i, sep = "") <- read.xlsx(xlsxFile="/Users/Ano/Desktop/IO_motorbikes/M04.xlsx", sheet = i-1879, colNames = FALSE)
+  
+#}  
+```
+
+```{r}
+
+
 
 
 ```
 
+
+
+
+
+```{r}
+#2104
+d2104 <-as.data.table(d2104)
+
+list2env(eapply(.GlobalEnv, function(x) {if(is.data.frame(x)) {setDT(x)} else {x}}), .GlobalEnv)
+
+d2104$X4 <- toupper(d2104$X4)
+d2103$X4 <- toupper(d2103$X4)
+d2102$X4 <- toupper(d2102$X4)
+d2101$X4 <- toupper(d2101$X4)
+
+d2012$X4 <- toupper(d2012$X4)
+d2011$X4 <- toupper(d2011$X4)
+d2010$X4 <- toupper(d2010$X4)
+d2009$X4 <- toupper(d2009$X4)
+d2008$X4 <- toupper(d2008$X4)
+d2007$X4 <- toupper(d2007$X4)
+d2006$X4 <- toupper(d2006$X4)
+d2005$X4 <- toupper(d2005$X4)
+d2004$X4 <- toupper(d2004$X4)
+d2003$X4 <- toupper(d2003$X4)
+d2002$X4 <- toupper(d2002$X4)
+d2001$X4 <- toupper(d2001$X4)
+
+d1912$X4 <- toupper(d1912$X4)
+d1911$X4 <- toupper(d1911$X4)
+d1910$X4 <- toupper(d1910$X4)
+d1909$X4 <- toupper(d1909$X4)
+d1908$X4 <- toupper(d1908$X4)
+d1907$X4 <- toupper(d1907$X4)
+d1906$X4 <- toupper(d1906$X4)
+d1905$X4 <- toupper(d1905$X4)
+d1904$X4 <- toupper(d1904$X4)
+d1903$X4 <- toupper(d1903$X4)
+d1902$X4 <- toupper(d1902$X4)
+d1901$X4 <- toupper(d1901$X4)
+
+d1812$X4 <- toupper(d1812$X4)
+d1811$X4 <- toupper(d1811$X4)
+d1810$X4 <- toupper(d1810$X4)
+d1809$X4 <- toupper(d1809$X4)
+d1808$X4 <- toupper(d1808$X4)
+d1807$X4 <- toupper(d1807$X4)
+d1806$X4 <- toupper(d1806$X4)
+d1805$X4 <- toupper(d1805$X4)
+d1804$X4 <- toupper(d1804$X4)
+d1803$X4 <- toupper(d1803$X4)
+d1802$X4 <- toupper(d1802$X4)
+d1801$X4 <- toupper(d1801$X4)
+
+
+
+table(sort(d1803$X4))
+```
+
+---
+Meta Programming ||| In progress|||
+df.list<-lapply(1:4, function(x) eval(parse(text=paste0("d210", x)))) #In order to store all datasets in one list using their name
+names(df.list)<-lapply(1:4, function(x) paste0("d201", x)) #Adding the name of each df in case you want to unlist the list afterwards
+for (i in 1:length(df.list)) {
+  df.list[[i]][[i$X4]]<-toupper(df.list[[i]][$X4])
+}
+
+
+
+```{r}
+# 2104
+
+d2104<- d2104[d2104$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+
+setnames(d2104, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
+
+d2104<- d2104[1:19, firm := "SYM",]
+d2104<- d2104[19:34, firm := "SUZUKI",]
+d2104<- d2104[35:38, firm := "YAMAHA",]
+d2104<- d2104[39:70, firm := "KYMCO",]
+d2104<- d2104[1:70]
+
+d2104$produce<- as.integer(d2104$produce)
+d2104$sales_in<- as.integer(d2104$sales_in)
+d2104$sales_out<- as.integer(d2104$sales_out)
+
+string<- c("produce","sales_in", "sales_out")
+d2104<- d2104[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2104[, "year":=2021, ]
+d2104[, "month":=04, ]
+d2104[, c("year","month","firm","cc","produce","sales_in","sales_out")]
+```
+```{r}
+#2013
+d2103<- d2103[d2103$X4 %in% c("50CC","90CC","100CC","110CC","125CC","150CC","250CC"), ]
+
+setnames(d2103, c("X1","X2","X4","X5","X7","X9"),c("firm","type","cc","produce","sales_in","sales_out"))
+
+d2103<- d2103[1:18, firm := "SYM",]
+d2103<- d2103[19:34, firm := "SUZUKI",]
+d2103<- d2103[35:38, firm := "YAMAHA",]
+d2103<- d2103[39:70, firm := "KYMCO",]
+d2103<- d2103[1:70]
+
+d2103$produce<- as.integer(d2103$produce)
+d2103$sales_in<- as.integer(d2103$sales_in)
+d2103$sales_out<- as.integer(d2103$sales_out)
+
+string<- c("produce","sales_in", "sales_out")
+d2103<- d2103[ , lapply(.SD, sum), by = .(cc, firm), .SDcols = string]
+d2103[, "year":=2021, ]
+d2103[, "month":=03, ]
+d2103[, c("year","month","firm","cc","produce","sales_in","sales_out")]
+
+
+
+```
