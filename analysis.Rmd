@@ -1,0 +1,137 @@
+---
+title: "Analysis"
+author: "Hsiao"
+date: "6/11/2021"
+output: html_document
+---
+```{r}
+library("tidyverse")
+library("openxlsx")
+library("data.table")
+library("readxl")
+library("dplyr")
+library("ggplot2")
+library("wesanderson")
+
+```
+
+```{r}
+sales<- read.csv('/Users/Ano/Desktop/IO_project_motorbike_market/sales_data.csv')
+gogoro_s <- read_excel("/Users/Ano/Desktop/IO_project_motorbike_market/gogoro_sales.xlsx")
+
+sales<- as.data.table(sales)
+gogoro <- as.data.table(gogoro_s)
+
+setnames(sales,c("firm"),c("company"))
+setnames(gogoro,c("type","sales"),c("cc","sales_in"))
+
+d<- rbind(sales, gogoro, fill=TRUE)
+d<- as.data.table(d)
+d[,company:= toupper(company)]
+```
+
+```{r}
+# total years
+test<- d[, lapply(.SD, sum), by = c("company","month","year"), .SDcols = c("sales_in","sales_out","produce")]
+
+test<- test[year %in% c("2018","2019","2020","2021"),]
+test<- test[, month := ifelse( year =="2019", month +12,month)]
+test<- test[, month := ifelse( year =="2020", month +24,month)]
+test<- test[, month := ifelse( year =="2021", month +36,month)]
+
+test<- test[, sales_out := ifelse( company =="GOGORO", sales_in, sales_out)]
+test<- test[, produce := ifelse( company =="GOGORO", sales_in, produce)]
+
+ggplot(test, aes(x = month, y = produce, colour =company, na.rm = TRUE)) + geom_line() + geom_point()+labs( x = "month", y = "total Produce", title = "Produce", subtitle ="GOGORO's production = their domestic sales because of missing data") + scale_color_brewer(palette = "Dark2")
+
+
+```
+
+```{r}
+#2018
+d_18<- d[year==2018, ,]
+
+test<- d_18[, lapply(.SD, sum), by = c("company","month","year"), .SDcols = c("sales_in","sales_out","produce")]
+
+test<- test[, sales_out := ifelse( company =="GOGORO", sales_in, sales_out)]
+test<- test[, produce := ifelse( company =="GOGORO", sales_in, produce)]
+
+
+# sales_inner market 
+ggplot(test, aes(x = month, y = sales_in, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = "Sales in domestic market, 2018", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+# Sales in abord market 
+ggplot(test, aes(x = month, y = sales_out, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = "Sales for abord market, 2018", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+# Total produce
+ggplot(test, aes(x = month, y = produce, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = " Total Produce, 2018", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+
+```
+
+```{r}
+#2019
+d_19<- d[year==2019, ,]
+
+test<- d_19[, lapply(.SD, sum), by = c("company","month","year"), .SDcols = c("sales_in","sales_out","produce")]
+
+test<- test[, sales_out := ifelse( company =="GOGORO", sales_in, sales_out)]
+test<- test[, produce := ifelse( company =="GOGORO", sales_in, produce)]
+
+
+# sales_inner market 
+ggplot(test, aes(x = month, y = sales_in, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = "Sales in domestic market, 2019", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+# Sales in abord market 
+ggplot(test, aes(x = month, y = sales_out, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = "Sales for abord market, 2019", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+# Total produce
+ggplot(test, aes(x = month, y = produce, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = " Total Produce, 2019", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+```
+
+
+```{r}
+#2020
+d_20<- d[year==2020, ,]
+
+test<- d_20[, lapply(.SD, sum), by = c("company","month","year"), .SDcols = c("sales_in","sales_out","produce")]
+
+test<- test[, sales_out := ifelse( company =="GOGORO", sales_in, sales_out)]
+test<- test[, produce := ifelse( company =="GOGORO", sales_in, produce)]
+
+
+# sales_inner market 
+ggplot(test, aes(x = month, y = sales_in, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = "Sales in domestic market, 2020", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+# Sales in abord market 
+ggplot(test, aes(x = month, y = sales_out, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = "Sales for abord market, 2020", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+# Total produce
+ggplot(test, aes(x = month, y = produce, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = " Total Produce, 2020", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
+
+```
+
+```{r}
+#2021
+
+
+d_21<- d[year==2021, ,]
+
+test<- d_21[, lapply(.SD, sum), by = c("company","month","year"), .SDcols = c("sales_in","sales_out","produce")]
+
+test<- test[, sales_out := ifelse( company =="GOGORO", sales_in, sales_out)]
+test<- test[, produce := ifelse( company =="GOGORO", sales_in, produce)]
+
+
+# sales_inner market 
+ggplot(test, aes(x = month, y = sales_in, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = "Sales in domestic market, 2021", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4")) + scale_color_brewer(palette = "Dark2")
+
+# Sales in abord market 
+ggplot(test, aes(x = month, y = sales_out, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = "Sales for abord market, 2021", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4"))+ scale_color_brewer(palette = "Dark2")
+
+# Total produce
+ggplot(test, aes(x = month, y = produce, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = " Total Produce, 2021", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4"))+ scale_color_brewer(palette = "Dark2")
+
+
+```
