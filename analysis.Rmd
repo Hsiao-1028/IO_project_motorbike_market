@@ -11,6 +11,7 @@ library("data.table")
 library("readxl")
 library("dplyr")
 library("ggplot2")
+library("gghighlight")
 library("wesanderson")
 
 ```
@@ -28,13 +29,18 @@ setnames(gogoro,c("type","sales"),c("cc","sales_in"))
 d<- rbind(sales, gogoro, fill=TRUE)
 d<- as.data.table(d)
 d[,company:= toupper(company)]
+
+d<- d[, cc:= ifelse(cc =="NA", "EV", cc)]
 ```
+
+
 
 ```{r}
 # total years
 test<- d[, lapply(.SD, sum), by = c("company","month","year"), .SDcols = c("sales_in","sales_out","produce")]
 
-test<- test[year %in% c("2018","2019","2020","2021"),]
+test<- test[year %in% c("2018","2019","2020","2021")| year =="2017"& month>=7,]
+test<- test[, month := ifelse( year =="2017", month -12,month)]
 test<- test[, month := ifelse( year =="2019", month +12,month)]
 test<- test[, month := ifelse( year =="2020", month +24,month)]
 test<- test[, month := ifelse( year =="2021", month +36,month)]
@@ -42,10 +48,141 @@ test<- test[, month := ifelse( year =="2021", month +36,month)]
 test<- test[, sales_out := ifelse( company =="GOGORO", sales_in, sales_out)]
 test<- test[, produce := ifelse( company =="GOGORO", sales_in, produce)]
 
-ggplot(test, aes(x = month, y = produce, colour =company, na.rm = TRUE)) + geom_line() + geom_point()+labs( x = "month", y = "total Produce", title = "Produce", subtitle ="GOGORO's production = their domestic sales because of missing data") + scale_color_brewer(palette = "Dark2")
+
+l <- ifelse(test$company == 'GOGORO', 1, 0.9)
+ltyp <- ifelse(test$company == 'GOGORO', 'longdash', '“dotted”')
+# The entry effect
+ggplot(test, aes(x = month, y = produce, colour =company, na.rm = TRUE)) + geom_line() + geom_point()+labs( x = "Month", y = "Total Produce", title = "Production from July 2017  to April 2021", subtitle ="GOGORO's production = their domestic sales because of missing data") + scale_color_brewer(palette = "Dark2") +gghighlight(company == "GOGORO")+ geom_vline(xintercept = -1,linetype=6) + geom_vline(xintercept = 24,linetype=6)
+
+testgo1 <- test[company %in% c("GOGORO","PGO"), , ]
+ggplot(data=testgo1, aes(x=month, y=produce, group= company, colour=company, na.rm= TRUE)) +
+  geom_line(aes( )) +geom_point(aes())+labs( x = "Month", y = "Total Produce", title = "Production from July 2017  to April 2021", subtitle ="Compare the production trend of GOGORO and PGO") + scale_color_brewer(palette = "Dark2")+ geom_vline(xintercept = -1,linetype=6) + geom_vline(xintercept = 24,linetype=6) +gghighlight(company != c("GOGORO","PGO")) +theme_minimal()
+
+testgo2 <- test[company %in% c("GOGORO","YAMAHA","SYM","KYMCO"), , ]
+ggplot(data=testgo2, aes(x=month, y=produce, group= company, colour=company, na.rm= TRUE)) +
+  geom_line(aes( )) +geom_point(aes())+labs( x = "Month", y = "Total Produce", title = "Production from July 2017  to April 2021", subtitle ="Compare the production trend of GOGORO and PGO") + scale_color_brewer(palette = "Dark2")+ geom_vline(xintercept = -1,linetype=6) + geom_vline(xintercept = 24,linetype=6) +gghighlight(company != c("GOGORO")) +theme_minimal()
+
+ggplot(data=testgo2, aes(x=month, y=sales_in, group= company, colour=company, na.rm= TRUE)) +
+  geom_line(aes( )) +geom_point(aes())+labs( x = "Month", y = "Total Produce", title = "Production from July 2017  to April 2021", subtitle ="Compare the inward sales trend of GOGORO and PGO") + scale_color_brewer(palette = "Dark2")+ geom_vline(xintercept = -1,linetype=6) + geom_vline(xintercept = 24,linetype=6) +gghighlight(company != c("GOGORO")) +theme_minimal()
+
+```
+
+
+```{r}
+# what is being affected the most? 
+test<-d
+test<- test[, sales_out := ifelse( company =="GOGORO", sales_in, sales_out)]
+test<- test[, produce := ifelse( company =="GOGORO", sales_in, produce)]
+test<- test[, cc := ifelse( cc %in% c("3000","6000","7000"), "EV", cc)]
+
+test<- test[, lapply(.SD, sum), by = c("cc","month","year"), .SDcols = c("sales_in","sales_out","produce")]
+
+test<- test[year %in% c("2018","2019","2020","2021")| year =="2017"& month>=7,]
+test<- test[, month := ifelse( year =="2017", month -12,month)]
+test<- test[, month := ifelse( year =="2019", month +12,month)]
+test<- test[, month := ifelse( year =="2020", month +24,month)]
+test<- test[, month := ifelse( year =="2021", month +36,month)]
+
+
+test1<- test[cc %in% c("50CC","EV")]
+
+ggplot(test1, aes(x = month, y = produce, colour =cc, na.rm = TRUE)) + geom_line() + geom_point()+labs( x = "month", y = "total Produce", title = "Produce: 50cc and GOGORO", subtitle ="")+ geom_vline(xintercept = -1, linetype =6) + geom_vline(xintercept = 24,linetype=6)+ scale_color_brewer(palette = "Dark2")
+
+test2<- test[cc %in% c("100CC","110CC","EV")]
+test2 <- test2[, cc := ifelse (cc == "110CC", "100CC", cc)]
+test2<- test2[, lapply(.SD, sum), by = c("month","year","cc"), .SDcols = c("sales_in","sales_out","produce")]
+
+ggplot(test2, aes(x = month, y = produce, colour =cc, na.rm = TRUE)) + geom_line() + geom_point()+labs( x = "month", y = "total Produce", title = "Produce: 100CC  and GOGORO", subtitle ="")+ geom_vline(xintercept = -1, linetype =6) + geom_vline(xintercept = 24,linetype=6)+ scale_color_brewer(palette = "Dark2")
+
+test3<- test[cc %in% c("125CC","EV")]
+
+ggplot(test3, aes(x = month, y = produce, colour =cc, na.rm = TRUE)) + geom_line() + geom_point()+labs( x = "month", y = "total Produce", title = "Produce: 125CC and GOGORO", subtitle ="")+ geom_vline(xintercept = -1, linetype =6) + geom_vline(xintercept = 24,linetype=6)+ scale_color_brewer(palette = "Dark2")
+test4<- test[cc %in% c("150CC","250CC","EV")]
+ggplot(test4, aes(x = month, y = produce, colour =cc, na.rm = TRUE)) + geom_line() + geom_point()+labs( x = "month", y = "total Produce", title = "Produce: 150CC, 250CC and GOGORO ", subtitle ="")+ geom_vline(xintercept = -1, linetype =6) + geom_vline(xintercept = 24,linetype=6)+ scale_color_brewer(palette = "Dark2")
+
 
 
 ```
+
+
+```{r}
+#gogoro2021
+
+tt<- d[company=="GOGORO"]
+tt<- tt[cc !="EV", ,]
+tt<- tt[, month := ifelse( year =="2021", month +12,month)]
+
+ggplot(tt, aes(x = month, y = sales_in, colour =cc, na.rm = TRUE)) + geom_line() + geom_point()+labs( x = "month", y = "total sales", title = "GOGORO Sales_in, 2020 and 2021 ", subtitle ="")+ geom_vline(xintercept = 12,linetype=6)+ scale_color_brewer(palette = "Dark2")
+
+```
+
+
+
+
+```{r}
+# regression
+d_reg <- d[company != "GOGORO", ,]
+g_reg <- d[company =="GOGORO", ,]
+g_reg<- g_reg[, c("produce","year","month")]
+setnames(g_reg, "produce", "g_pro")
+
+
+d_reg<- d_reg[, month := ifelse( year =="2017", month -12,month)]
+d_reg<- d_reg[, month := ifelse( year =="2019", month +12,month)]
+d_reg<- d_reg[, month := ifelse( year =="2020", month +24,month)]
+d_reg<- d_reg[, month := ifelse( year =="2021", month +36,month)]
+
+g_reg<- g_reg[, month := ifelse( year =="2017", month -12,month)]
+g_reg<- g_reg[, month := ifelse( year =="2019", month +12,month)]
+g_reg<- g_reg[, month := ifelse( year =="2020", month +24,month)]
+g_reg<- g_reg[, month := ifelse( year =="2021", month +36,month)]
+
+reg<- merge(d_reg, g_reg, by ="month", allow.cartesian=TRUE)
+# change into seasons
+reg<- reg[ ,month := ifelse( month%%12 %in% c(1,2,3), 1, month )]
+reg<- reg[ ,month := ifelse( month%%12 %in% c(4,5,6), 2, month )]
+reg<- reg[ ,month := ifelse( month%%12 %in% c(7,8,9), 3, month )]
+reg<- reg[ ,month := ifelse( month%%12 %in% c(10,11,0), 4, month )]
+
+# reg<- reg[ ,produce := log(produce)]
+# reg<- reg[ ,g_pro := log(g_pro)]
+# reg<- reg[ ,produce := ifelse( produce %in% c("-Inf", "NaN","NA"), 0, produce)]
+
+summary(reg$cc)
+table(reg$cc)
+
+f<- lm(produce ~g_pro+ company + cc + year.x+ month, data = reg , na.rm= TRUE)
+f1<- lm(produce ~g_pro*cc+ company + cc + year.x+ month, data = reg , na.rm= TRUE)
+f2<- lm(produce ~g_pro*company+ company + cc + year.x+ month, data = reg , na.rm= TRUE)
+
+summary(f)
+summary(f1)
+summary(f2)
+
+lreg<- reg[ ,produce := log(produce)]
+lreg<- lreg[ ,g_pro := log(g_pro)]
+lreg<- lreg[ ,produce := ifelse( produce %in% c("-Inf", "NaN","NA"), 0, produce)]
+
+lf<- lm(produce ~g_pro+ company + cc + year.x+ month, data = lreg , na.rm= TRUE)
+lf1<- lm(produce ~g_pro+ g_pro*cc+ company + cc + year.x+ month, data = lreg , na.rm= TRUE)
+lf2<- lm(produce ~g_pro + g_pro*company+ g_pro*cc + company + cc + year.x+ month, data = lreg , na.rm= TRUE)
+
+
+summary(lf)
+summary(lf1)
+summary(lf2)
+
+
+```
+
+
+
+
+
+
+
+
+
 
 ```{r}
 #2018
@@ -65,7 +202,6 @@ ggplot(test, aes(x = month, y = sales_out, colour =company)) + geom_line() + geo
 
 # Total produce
 ggplot(test, aes(x = month, y = produce, colour =company)) + geom_line() + geom_point()+labs( x = "month", y = "sales", title = " Total Produce, 2018", subtitle ="")  + scale_x_discrete(limit = c("1","2","3","4","5","6","7","8","9","10","11","12"))+ scale_color_brewer(palette = "Dark2")
-
 
 ```
 
@@ -114,8 +250,6 @@ ggplot(test, aes(x = month, y = produce, colour =company)) + geom_line() + geom_
 
 ```{r}
 #2021
-
-
 d_21<- d[year==2021, ,]
 
 test<- d_21[, lapply(.SD, sum), by = c("company","month","year"), .SDcols = c("sales_in","sales_out","produce")]
