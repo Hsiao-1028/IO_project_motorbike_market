@@ -4,7 +4,13 @@ author: "Hsiao"
 date: "6/11/2021"
 output: html_document
 ---
+# For professor Jian-Da Zhu 
+# The first three block is about the regreesion, remainings are used for plots.
+# Please let me know if we encounter any problems.
+
+
 ```{r}
+
 library("tidyverse")
 library("openxlsx")
 library("data.table")
@@ -17,6 +23,7 @@ library("wesanderson")
 ```
 
 ```{r}
+# Conform data
 sales<- read.csv('/Users/Ano/Desktop/IO_project_motorbike_market/sales_data.csv')
 gogoro_s <- read_excel("/Users/Ano/Desktop/IO_project_motorbike_market/gogoro_sales.xlsx")
 
@@ -30,9 +37,83 @@ d<- rbind(sales, gogoro, fill=TRUE)
 d<- as.data.table(d)
 d[,company:= toupper(company)]
 
-d<- d[, cc:= ifelse(cc =="NA", "EV", cc)]
+d<- d[, cc:= ifelse(cc =="NA", "EV", cc)] # before 2019, Gogoro has no type
 ```
 
+
+```{r}
+# Regression
+d_reg <- d[company != "GOGORO", ,]
+g_reg <- d[company =="GOGORO", ,]
+g_reg<- g_reg[, c("sales_in","year","month")]
+setnames(g_reg, "sales_in", "g_pro")
+
+
+d_reg<- d_reg[, month := ifelse( year =="2017", month -12,month)]
+d_reg<- d_reg[, month := ifelse( year =="2019", month +12,month)]
+d_reg<- d_reg[, month := ifelse( year =="2020", month +24,month)]
+d_reg<- d_reg[, month := ifelse( year =="2021", month +36,month)]
+
+g_reg<- g_reg[, month := ifelse( year =="2017", month -12,month)]
+g_reg<- g_reg[, month := ifelse( year =="2019", month +12,month)]
+g_reg<- g_reg[, month := ifelse( year =="2020", month +24,month)]
+g_reg<- g_reg[, month := ifelse( year =="2021", month +36,month)]
+
+reg<- merge(d_reg, g_reg, by ="month", allow.cartesian=TRUE)
+
+# change into seasons
+reg[, "season":=month, ]
+reg<- reg[ ,season:= ifelse( season%%12 %in% c(1,2,3), 1, season )]
+reg<- reg[ ,season := ifelse( season%%12 %in% c(4,5,6), 2, season )]
+reg<- reg[ ,season:= ifelse( season%%12 %in% c(7,8,9), 3, season )]
+reg<- reg[ ,season:= ifelse( season%%12 %in% c(10,11,0), 4, season )]
+
+# Make it dummy
+reg[,season:= as.character(reg$season),]
+reg[,"year":= as.character(reg$year.x),]
+reg[, c("year.x","year.y"):=NULL]
+# reg<- reg[ ,produce := log(produce)]
+# reg<- reg[ ,g_pro := log(g_pro)]
+# reg<- reg[ ,produce := ifelse( produce %in% c("-Inf", "NaN","NA"), 0, produce)]
+
+
+
+# without log 
+f<- lm(produce ~g_pro+ company + cc + year+ season, data = reg , na.rm= TRUE)
+f1<- lm(produce ~g_pro*cc+ company + cc + year+ season, data = reg , na.rm= TRUE)
+f2<- lm(produce ~g_pro*company+ company + cc + year+ season, data = reg , na.rm= TRUE)
+
+summary(f)
+summary(f1)
+summary(f2)
+
+lreg<- reg[ ,produce := log(produce)]
+lreg<- lreg[ ,g_pro := log(g_pro)]
+lreg<- lreg[ ,produce := ifelse( produce %in% c("-Inf", "NaN","NA"), 0, produce)]
+
+lf<- lm(produce ~g_pro+ company + cc + year+ season, data = lreg , na.rm= TRUE)
+lf1<- lm(produce ~g_pro+ g_pro*cc+ company + cc + year+ season, data = lreg , na.rm= TRUE)
+lf2<- lm(produce ~g_pro + g_pro*company + company + cc + year+ season, data = lreg , na.rm= TRUE)
+lf3<- lm(produce ~g_pro + g_pro*company+ g_pro*cc + company + cc + year+ season, data = lreg , na.rm= TRUE)
+
+
+summary(lf)
+summary(lf1)
+summary(lf2)
+summary(lf3)
+
+###############
+###############
+
+
+# Questions : 
+# the direction and relative size of coefficient on cc and companies are "just" contrast with my analysis base on graphs. This is so strange, would you know why? Thanks.
+
+```
+
+
+--------
+Plots
 
 
 ```{r}
@@ -117,71 +198,8 @@ ggplot(tt, aes(x = month, y = sales_in, colour =cc, na.rm = TRUE)) + geom_line()
 ```
 
 
-
-
-```{r}
-# regression
-d_reg <- d[company != "GOGORO", ,]
-g_reg <- d[company =="GOGORO", ,]
-g_reg<- g_reg[, c("produce","year","month")]
-setnames(g_reg, "produce", "g_pro")
-
-
-d_reg<- d_reg[, month := ifelse( year =="2017", month -12,month)]
-d_reg<- d_reg[, month := ifelse( year =="2019", month +12,month)]
-d_reg<- d_reg[, month := ifelse( year =="2020", month +24,month)]
-d_reg<- d_reg[, month := ifelse( year =="2021", month +36,month)]
-
-g_reg<- g_reg[, month := ifelse( year =="2017", month -12,month)]
-g_reg<- g_reg[, month := ifelse( year =="2019", month +12,month)]
-g_reg<- g_reg[, month := ifelse( year =="2020", month +24,month)]
-g_reg<- g_reg[, month := ifelse( year =="2021", month +36,month)]
-
-reg<- merge(d_reg, g_reg, by ="month", allow.cartesian=TRUE)
-# change into seasons
-reg<- reg[ ,month := ifelse( month%%12 %in% c(1,2,3), 1, month )]
-reg<- reg[ ,month := ifelse( month%%12 %in% c(4,5,6), 2, month )]
-reg<- reg[ ,month := ifelse( month%%12 %in% c(7,8,9), 3, month )]
-reg<- reg[ ,month := ifelse( month%%12 %in% c(10,11,0), 4, month )]
-
-# reg<- reg[ ,produce := log(produce)]
-# reg<- reg[ ,g_pro := log(g_pro)]
-# reg<- reg[ ,produce := ifelse( produce %in% c("-Inf", "NaN","NA"), 0, produce)]
-
-summary(reg$cc)
-table(reg$cc)
-
-f<- lm(produce ~g_pro+ company + cc + year.x+ month, data = reg , na.rm= TRUE)
-f1<- lm(produce ~g_pro*cc+ company + cc + year.x+ month, data = reg , na.rm= TRUE)
-f2<- lm(produce ~g_pro*company+ company + cc + year.x+ month, data = reg , na.rm= TRUE)
-
-summary(f)
-summary(f1)
-summary(f2)
-
-lreg<- reg[ ,produce := log(produce)]
-lreg<- lreg[ ,g_pro := log(g_pro)]
-lreg<- lreg[ ,produce := ifelse( produce %in% c("-Inf", "NaN","NA"), 0, produce)]
-
-lf<- lm(produce ~g_pro+ company + cc + year.x+ month, data = lreg , na.rm= TRUE)
-lf1<- lm(produce ~g_pro+ g_pro*cc+ company + cc + year.x+ month, data = lreg , na.rm= TRUE)
-lf2<- lm(produce ~g_pro + g_pro*company+ g_pro*cc + company + cc + year.x+ month, data = lreg , na.rm= TRUE)
-
-
-summary(lf)
-summary(lf1)
-summary(lf2)
-
-
-```
-
-
-
-
-
-
-
-
+--------
+Remnant ... 
 
 
 ```{r}
